@@ -11,7 +11,7 @@ def getMessages(emailName):
     domain = email.split('@')[1]
     url = f"https://www.1secmail.com/api/v1/?action=getMessages&login={login}&domain={domain}"
     response = requests.request("GET", url)
-    return response
+    return response.json()
 
 def readMessage(emailName):
     email = emailName
@@ -25,5 +25,7 @@ def readMessage(emailName):
     responseRead = requests.request("GET", urlRead)
     jsonDataRead = responseRead.json()
     return jsonDataRead["textBody"].split('\n')[0]
+
+print(getMessages("61bzkkr380jc@bheps.com"))
 
 
