@@ -20,7 +20,7 @@ def getMessages(emailName):
     url = f"https://www.1secmail.com/api/v1/?action=getMessages&login={login}&domain={domain}"
     response = requests.request("GET", url)
     if bool(response.json()) == False:
-        return "This email does not exist"
+        return "No messages found"
     return response.json()
 
 #Enter an email
@@ -28,8 +28,8 @@ def getMessages(emailName):
 def readLatestMessage(emailName):
     email, login, domain = credentials(emailName)
     jsonData = getMessages(email)
-    if jsonData == "This email does not exist":
-        return "This email does not exist"
+    if jsonData == "No messages found":
+        return "No messages found"
     id = jsonData[0]["id"]
     urlRead = f"https://www.1secmail.com/api/v1/?action=readMessage&login={login}&domain={domain}&id={id}"
     responseRead = requests.request("GET", urlRead)
@@ -55,8 +55,8 @@ def readInbox(emailName):
     string = ""
     email, login, domain = credentials(emailName)
     jsonData = getMessages(email)
-    if jsonData == "This email does not exist":
-        return "This email does not exist"
+    if jsonData == "No messages found":
+        return "No messages found"
     for i in jsonData:
         id = i["id"]
         time = i['date']
