@@ -19,6 +19,8 @@ def getMessages(emailName):
     email, login, domain = credentials(emailName)
     url = f"https://www.1secmail.com/api/v1/?action=getMessages&login={login}&domain={domain}"
     response = requests.request("GET", url)
+    if bool(response.json()) == False:
+        return "This email does not exist"
     return response.json()
 
 #Enter an email
@@ -26,9 +28,13 @@ def getMessages(emailName):
 def readLatestMessage(emailName):
     email, login, domain = credentials(emailName)
     jsonData = getMessages(email)
+    if jsonData == "This email does not exist":
+        return "This email does not exist"
     id = jsonData[0]["id"]
     urlRead = f"https://www.1secmail.com/api/v1/?action=readMessage&login={login}&domain={domain}&id={id}"
     responseRead = requests.request("GET", urlRead)
+    if (responseRead.text == "Message not found"):
+        return "No messages recieved"
     jsonDataRead = responseRead.json()
     return jsonDataRead["textBody"].split('\n')[0]
 
@@ -38,6 +44,8 @@ def readMessageById(emailName, id):
     email, login, domain = credentials(emailName)
     urlRead = f"https://www.1secmail.com/api/v1/?action=readMessage&login={login}&domain={domain}&id={id}"
     responseRead = requests.request("GET", urlRead)
+    if (responseRead.text == "Message not found"):
+        return responseRead.text
     jsonDataRead = responseRead.json()
     return jsonDataRead["textBody"].split('\n')[0]
 
@@ -47,13 +55,15 @@ def readInbox(emailName):
     string = ""
     email, login, domain = credentials(emailName)
     jsonData = getMessages(email)
+    if jsonData == "This email does not exist":
+        return "This email does not exist"
     for i in jsonData:
         id = i["id"]
         time = i['date']
         message = readMessageById(email, id)
         string += f"Message sent at {time}: {message}\n"
     if string == "":
-        return "No messages have been recieved" 
+        return "No messages recieved" 
     string += "End of Messages"
     return string
 
