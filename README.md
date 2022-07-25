@@ -1,7 +1,7 @@
 # Generate temporary emails
 
 ## About
-This package wraps the 1secmail API and allows you to easily generate throwaway emails and check their inboxes. The functions provided make simple GET requests and return the data in an easy to read format.
+This package wraps the 1secmail API and allows you to easily generate throwaway emails and check their inboxes. The functions provided make simple GET requests and return the data in an easy to read format. There is also a cli version of it if you would like to try.
 
 ### Functions
 
