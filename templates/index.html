@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous">
+        </script>
+    </head>
+    <body>
+        <h1>Throwaway Email</h1>
+        {% set x = genEmail()%}
+        <p>{{x}}</p>
+        <button>Check Inbox</button>
+        <br><br>
+        <div id="readInbox"></div>
+        <script>
+            $(document).ready(function(){
+              $("button").click(function(){
+                $.ajax({url: "/{{x}}", success: function(result){
+                  $("#readInbox").text(result)
+                }});
+              });
+            });
+        </script>
+    </body>
+</html>

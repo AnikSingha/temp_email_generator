@@ -1,3 +1,5 @@
+from flask import Flask, render_template, request, url_for
+from jinja2 import Environment, FileSystemLoader
 import requests
 
 #Randomly generates an Email
@@ -61,11 +63,34 @@ def readInbox(emailName):
         id = i["id"]
         time = i['date']
         message = readMessageById(email, id)
-        string += f"Message sent at {time}: {message}\n"
+        string += f"Message sent at {time}: {message}\n\n"
     if string == "":
         return "No messages recieved" 
-    string += "End of Messages"
+    string += "\nEnd of Messages"
     return string
 
+app = Flask(__name__)
 
+functions = {
+    "genEmail": genEmail,
+    "credentials": credentials,
+    "getMessages": getMessages,
+    "readLatestMessage": readLatestMessage,
+    "readMessageById": readMessageById,
+    "readInbox": readInbox
+}
 
+def render(template):
+    env = Environment(loader=FileSystemLoader("templates/"))
+    jinja_template = env.get_template(template)
+    jinja_template.globals.update(functions)
+    template_string = jinja_template.render()
+    return template_string
+
+@app.route('/')
+def home():
+    return render(template="index.html")
+
+@app.route('/<email>')
+def inbox(email):
+    return readInbox(email)
